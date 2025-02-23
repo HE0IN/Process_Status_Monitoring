@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>용접현황</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      #header {
+        height: 100px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        gap: 10px;
+      }
+      #header img {
+        height: 80px;
+        margin-left: 0px;
+      }
+      #nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        color: black;
+        padding: 10px;
+      }
+      ul {
+        text-decoration: none;
+        list-style: none;
+      }
+      ul li {
+        display: inline;
+      }
+
+      h2 {
+        color: #0e0342;
+        font-weight: bold;
+      }
+      .custom-button {
+        background: transparent;
+        background-color: #0e0342;
+        color: white;
+        padding: 5px 20px;
+        border-radius: 20px;
+        border: 3px solid black;
+        box-sizing: border-box;
+        margin-left: 30px;
+      }
+
+      .custom-button:hover {
+        background-color: #e0e8ff;
+        color: #000;
+      }
+
+      .nav-tabs .nav-item .nav-link {
+        color: black;
+        border-radius: 15px;
+        padding: 10px 20px;
+        margin-right: 10px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .nav-tabs .nav-item .nav-link.active {
+        background-color: #3a285e;
+        color: white;
+      }
+
+      .nav-tabs .nav-item .nav-link:hover {
+        background-color: #4b386f;
+        color: white;
+      }
+
+      .nav-tabs {
+        border-bottom: none;
+      }
+
+      #aside {
+        border-right: 5px solid #3a285e;
+        padding: 15px;
+        height: 650px;
+        margin-bottom: 15px;
+      }
+
+      #section {
+        padding-left: 15px; /* 구분선과의 간격 */
+      }
+
+      #welcome-message {
+        display: inline-block;
+        border-bottom: 1px solid;
+        padding-bottom: 4px;
+      }
+      .btn {
+        display: flex;
+        justify-content: flex-start;
+        width: 90%;
+        padding-top: 20px;
+        border: none;
+        border-radius: 0px;
+        border-bottom: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid p-4">
+      <div id="header">
+        <div id="header-left" style="display: flex; gap: 20px">
+          <img src="/img/samsung.png" alt="Logo" />
+          <div class="center"><h2>SHI Process Condition</h2></div>
+        </div>
+        <div id="header-right" style="display: flex; gap: 20px">
+          <p id="welcome-message">님 반갑습니다.</p>
+          <button type="button" class="custom-button" onclick="logout()">
+            로그아웃
+          </button>
+        </div>
+      </div>
+
+      <div id="nav" class="box">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" href="#">개정도 현황</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">설계 현황</a>
+          </li>
+          <li class="nav-item">
+            <a
+            class="nav-link" href="#"
+            >
+              생산설계
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">용접 현황</a>
+          </li>
+        </ul>
+      </div>
+      <div id="main" class="col-12 d-flex">
+        <div
+          id="aside"
+          class="col-2 d-flex flex-column justify-content-between m-4"
+        >
+            <ul>
+              <li><button class="btn" type="button" onClick="location.href='fourth-CNT.html'">CNT</button></li>
+              <li><button class="btn" type="button " onClick="location.href='fourth-COT.html'" style="background-color: #0e0342; color: white;">COT</button></li>
+              <li><button class="btn" type="button" onClick="location.href='fourth-LNG.html'">LNG</button></li>
+            </ul>
+          
+            
+          </div>
+          <div id="section" class="col-10">
+            <h5 style="margin-top: 30px; margin-bottom: 30px">
+              선종별 불량코드</h5>
+            <div>
+              <p>ㅎㅇㅎㅇ 나는야 COT</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // 서버에서 사용자 정보를 가져와서 화면에 표시
+      fetch("/user-info")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.username) {
+            document.getElementById(
+              "welcome-message"
+            ).textContent = `${data.username}님 반갑습니다.`;
+          }
+        })
+        .catch((err) => {
+          console.error("사용자 정보를 가져오는 중 오류 발생:", err);
+        });
+
+      // 로그아웃 함수
+      function logout() {
+        window.location.href = "/logout";
+      }
+
+      // 페이지가 로드될 때 로컬 스토리지에서 활성화된 탭 상태를 불러옴
+      document.addEventListener("DOMContentLoaded", function () {
+        const activeTab = localStorage.getItem("activeTab");
+        if (activeTab) {
+          // 모든 탭에서 active 클래스 제거
+          document.querySelectorAll(".nav-link").forEach(function (tab) {
+            tab.classList.remove("active");
+          });
+          // 저장된 탭에 active 클래스 추가
+          document.getElementById(activeTab).classList.add("active");
+        } else {
+          // 기본적으로 첫 번째 탭을 활성화
+          document.getElementById("tab1").classList.add("active");
+        }
+      });
+
+      // 탭 클릭 시 로컬 스토리지에 활성화된 탭 상태 저장
+      document.querySelectorAll(".nav-link").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          // 모든 탭에서 active 클래스 제거
+          document.querySelectorAll(".nav-link").forEach(function (tab) {
+            tab.classList.remove("active");
+          });
+
+          // 클릭된 탭에 active 클래스 추가
+          tab.classList.add("active");
+
+          // 로컬 스토리지에 탭 ID 저장
+          localStorage.setItem("activeTab", tab.id);
+
+          // 페이지가 새로고침되어 다른 페이지로 이동하게 하려면 추가 동작은 필요하지 않음
+          // 기본적인 <a> 태그 동작이 페이지 이동을 처리함.
+        });
+      });
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

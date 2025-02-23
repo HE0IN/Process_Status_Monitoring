@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>용접현황</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      * {
+        background-color: #cee3f6;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        overflow: hidden;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      #header {
+        height: 100px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        gap: 10px;
+      }
+      #header img {
+        height: 80px;
+        width: 105px;
+        margin-left: 0px;
+      }
+      #nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #cee3f6;
+        color: black;
+        padding: 10px;
+      }
+      .breadcrumb {
+        margin-bottom: 0;
+        background-color: transparent; /* 배경색 제거 */
+        margin-left: 60px;
+      }
+
+      /* 브레드크럼 전체 글자 크기 설정 */
+      .breadcrumb {
+        font-size: 18px; /* 원하는 크기로 설정 */
+      }
+
+      /* first_menu의 글자 색상과 밑줄 제거 */
+      #first_menu {
+        color: #0e0342; /* 글자 색상을 원하는 색으로 변경 */
+        text-decoration: none; /* 밑줄 제거 */
+        font-weight: bold;
+      }
+      ul {
+        text-decoration: none;
+        list-style: none;
+      }
+      ul li {
+        display: inline;
+      }
+      h2 {
+        color: #0e0342;
+        font-weight: bold;
+        padding-top: 9px;
+      }
+      .custom-button {
+        background-color: #0e0342;
+        color: white;
+        padding: 5px 20px;
+        border-radius: 20px;
+        border: 3px solid black;
+        margin-left: 30px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .custom-button:hover {
+        background-color: #0e0342;
+        color: white;
+        text-decoration: underline;
+      }
+      .nav-tabs .nav-item .nav-link {
+        color: black;
+        border-radius: 15px;
+        padding: 10px 20px;
+        margin-right: 10px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .nav-tabs .nav-item .nav-link.active {
+        background-color: #3a285e;
+        color: white;
+      }
+      .nav-tabs .nav-item .nav-link:hover {
+        background-color: #4b386f;
+        color: white;
+      }
+      .nav-tabs {
+        border-bottom: none;
+      }
+      #aside {
+        border-right: 5px solid #3a285e;
+        padding: 15px;
+        padding-top: 6px;
+        height: 650px;
+        margin-bottom: 15px;
+      }
+
+      #section {
+        display: flex; /* Flexbox로 차트와 테이블을 가로로 배치 */
+        justify-content: space-between;
+        width: 100%;
+        height: 100vh; /* 화면 전체 높이를 사용 */
+      }
+
+      #chart-container {
+        display: flex;
+        max-width: 500px; /* 컨테이너의 최대 너비 설정 */
+        width: 100%;
+        justify-content: center; /* 차트가 가운데 정렬되도록 설정 */
+        padding: 20px;
+      }
+
+      #table-container {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: auto;
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        justify-content: top; /* 테이블을 수평으로 가운데 정렬 */
+        flex-direction: column;
+      }
+
+      #table-wrapper {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: auto;
+        margin-top: 10px; /* 검색창과 테이블 간격 */
+        scrollbar-gutter: stable;
+      }
+
+      #data-table {
+        width: 100%; /* 테이블 너비 전체 설정 */
+        table-layout: fixed; /* 고정된 열 너비 */
+        border-collapse: separate; /*셀 테두리와 내용 간에 간격을 줌*/
+      }
+
+      #data-table td {
+        text-align: center; /* 텍스트 가운데 정렬 */
+        border: 1px solid #0e0342; /* 셀 테두리 설정 */
+        border-radius: 5px; /*  셀 테두리 라운드 */
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        overflow: hidden; /* 텍스트가 넘칠 경우 숨기기 */
+        text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
+      }
+
+      #data-table th {
+        text-align: center; /* 텍스트 가운데 정렬 */
+        border: 1px solid #0e0342; /* 셀 테두리 설정 */
+        border-radius: 5px; /*  셀 테두리 라운드 */
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        overflow: hidden; /* 텍스트가 넘칠 경우 숨기기 */
+        text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
+        background-color: #0e0342; /* 원하는 색상으로 변경 */
+        color: white; /* 텍스트 색상을 흰색으로 변경 */
+        font-weight: bold;
+      }
+      #data-table td {
+        border: 1px solid #0e0342; /* 테두리 색상 */
+        border-radius: 5px;
+        padding: 8px; /* 셀 내부 패딩 */
+        text-align: center; /* 텍스트 가운데 정렬 */
+      }
+
+      #myPieChart {
+        width: 300px; /* 너비 조정 */
+        height: 300px; /* 높이 조정 */
+      }
+
+      #welcome-message {
+        display: inline-block;
+        border-bottom: 1px solid;
+        padding-bottom: 4px;
+      }
+      .accordion-body a {
+        color: black;
+        text-decoration: none;
+      }
+      .collection-link {
+        background-color: transparent;
+        border: 0px;
+      }
+      .accordion-body ul {
+        display: flex;
+        flex-direction: column;
+      }
+      .accordion-body li {
+        flex: 1;
+      }
+
+      .aside-link {
+        text-decoration: none;
+        color: black;
+      }
+      ul li a:hover {
+        background-color: #e0f2f7;
+      }
+      ul li a {
+        display: block;
+        padding: 10px 20px;
+        text-decoration: none;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      .selected {
+        background-color: white;
+        color: #000;
+      }
+      #header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .sort-header {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background-color: #0e0342;
+      }
+
+      .sort-header i {
+        margin-left: 10px; /* 아이콘과 텍스트 간의 간격 */
+        cursor: pointer;
+      }
+      .search-container {
+        display: flex;
+        justify-content: flex-start; /* 왼쪽에 정렬 */
+        padding: 10px 0; /* 위아래에 약간의 여백 */
+      }
+
+      .search-input {
+        margin-top: 10px;
+        margin-left: 10px;
+        width: 200px; /* 검색창의 너비를 200px로 조정 */
+        padding: 5px; /* 입력창 안쪽 여백 조정 */
+        font-size: 14px; /* 텍스트 크기 조정 */
+        border: 1px solid #ccc; /* 테두리 추가 */
+        border-radius: 5px; /* 모서리를 둥글게 */
+      }
+      .breadcrumb {
+        margin-bottom: 0;
+        background-color: transparent; /* 배경색 제거 */
+        margin-left: 45px;
+        font-size: 18px; /* 원하는 크기로 설정 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid p-4">
+      <div id="header">
+        <div id="header-left" style="display: flex; gap: 20px">
+          <a href="/">
+            <img src="/img/samsung.png" alt="Logo" id="img1" />
+          </a>
+          <div class="center"><h2>SHI Process Condition</h2></div>
+        </div>
+        <div
+          id="header-right"
+          style="display: flex; align-items: center; gap: 20px"
+        >
+          <p id="welcome-message" style="margin-top: 15px">님 반갑습니다.</p>
+          <button type="button" class="custom-button" onclick="logout()">
+            로그아웃
+          </button>
+        </div>
+      </div>
+
+      <div id="nav" class="box">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" id="tab1" href="./first">개정도 현황</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tab2" href="./second">설계 요청 현황</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tab3" href="./third">생산설계</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tab4" href="./sixth">용접 현황</a>
+          </li>
+        </ul>
+      </div>
+      <!-- 브레드크럼 위치 -->
+      <nav
+        style="--bs-breadcrumb-divider: '>>'"
+        aria-label="breadcrumb"
+        class="my-2"
+        id="mybreadcrumb"
+      >
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="./sixth" id="first_menu">
+              <i class="fa-solid fa-list"></i>&nbsp용접 현황
+            </a>
+          </li>
+          <li class="breadcrumb-item" id="second_menu">
+            <a href="#">조회</a>
+          </li>
+          <li
+            class="breadcrumb-item active"
+            aria-current="page"
+            id="third_menu"
+          >
+            용접현황
+          </li>
+        </ol>
+      </nav>
+
+      <div id="main" class="col-12 d-flex">
+        <div id="aside" class="col-2 d-flex flex-column m-4">
+          <!-- 선종 메뉴 -->
+          <div class="accordion accordion-flush" id="accordionFlushExample1">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  style="
+                    box-shadow: none;
+                    background-color: #cee3f6;
+                    border: solid 1px #0e0342;
+                    border-radius: 10px;
+                    font-weight: bold;
+                  "
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne1"
+                  aria-expanded="true"
+                  aria-controls="flush-collapseOne1"
+                >
+                  선종
+                </button>
+              </h2>
+              <div
+                id="flush-collapseOne1"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#accordionFlushExample1"
+              >
+                <ul class="m-0 p-0">
+                  <li>
+                    <a
+                      href="#"
+                      data-type="COT"
+                      class="collection-link aside-link active"
+                      id="collection-link1"
+                      onclick="menudisplay('용접 현황','선종','COT', 'collection-link1')"
+                      >COT</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="CNT"
+                      class="collection-link aside-link"
+                      id="collection-link2"
+                      onclick="menudisplay('용접 현황','선종','CNT', 'collection-link2')"
+                      >CNT</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="LNG"
+                      class="collection-link aside-link"
+                      id="collection-link3"
+                      onclick="menudisplay('용접 현황','선종','LNG', 'collection-link3')"
+                      >LNG</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 업체 메뉴 -->
+          <div class="accordion accordion-flush" id="accordionFlushExample2">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  style="
+                    box-shadow: none;
+                    background-color: #cee3f6;
+                    border: solid 1px #0e0342;
+                    border-radius: 10px;
+                    font-weight: bold;
+                  "
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne2"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseOne2"
+                >
+                  업체
+                </button>
+              </h2>
+              <div
+                id="flush-collapseOne2"
+                class="accordion-collapse collapse"
+                data-bs-parent="#accordionFlushExample2"
+              >
+                <ul class="m-0 p-0">
+                  <li>
+                    <a
+                      href="#"
+                      data-type="Vendor"
+                      class="collection-link aside-link"
+                      id="collection-link4"
+                      onclick="menudisplay('용접 현황','업체','Vendor', 'collection-link4')"
+                      >Vendor</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="SHI"
+                      class="collection-link aside-link"
+                      id="collection-link5"
+                      onclick="menudisplay('용접 현황','업체','SHI', 'collection-link5')"
+                      >SHI</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 용접방법 메뉴 추가 -->
+          <div class="accordion accordion-flush" id="accordionFlushExample3">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  style="
+                    box-shadow: none;
+                    background-color: #cee3f6;
+                    border: solid 1px #0e0342;
+                    border-radius: 10px;
+                    font-weight: bold;
+                  "
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne3"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseOne3"
+                >
+                  용접방법
+                </button>
+              </h2>
+              <div
+                id="flush-collapseOne3"
+                class="accordion-collapse collapse"
+                data-bs-parent="#accordionFlushExample3"
+              >
+                <ul class="m-0 p-0">
+                  <li>
+                    <a
+                      href="#"
+                      data-type="EGFC"
+                      class="collection-link aside-link"
+                      id="collection-link6"
+                      onclick="menudisplay('용접 현황','용접방법','EGFC', 'collection-link6')"
+                      >EGFC</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="EGW"
+                      class="collection-link aside-link"
+                      id="collection-link7"
+                      onclick="menudisplay('용접 현황','용접방법','EGW', 'collection-link7')"
+                      >EGW</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="FAB"
+                      class="collection-link aside-link"
+                      id="collection-link8"
+                      onclick="menudisplay('용접 현황','용접방법','FAB', 'collection-link8')"
+                      >FAB</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="FCAW"
+                      class="collection-link aside-link"
+                      id="collection-link9"
+                      onclick="menudisplay('용접 현황','용접방법','FCAW', 'collection-link9')"
+                      >FCAW</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="FCSA"
+                      class="collection-link aside-link"
+                      id="collection-link10"
+                      onclick="menudisplay('용접 현황','용접방법','FCSA', 'collection-link10')"
+                      >FCSA</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      data-type="SAW"
+                      class="collection-link aside-link"
+                      id="collection-link11"
+                      onclick="menudisplay('용접 현황','용접방법','SAW', 'collection-link11')"
+                      >SAW</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- section 영역 추가 -->
+        <div id="section" class="d-flex">
+          <div
+            id="chart-container"
+            style="display: flex; justify-content: center"
+          >
+            <canvas id="myPieChart" width="500" height="500"></canvas>
+            <!-- 크기 조정 -->
+          </div>
+
+          <div id="table-container">
+            <input
+              type="text"
+              id="tableSearch"
+              class="form-control search-input"
+              placeholder="Search..."
+              onkeyup="filterTable()"
+            />
+            <div id="table-wrapper">
+              <table id="data-table" class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>
+                      <div class="sort-header">
+                        프로젝트
+                        <i
+                          class="fa fa-sort"
+                          style="background-color: #0e0342"
+                          onclick="toggleSort(0)"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="sort-header">
+                        업체구분
+                        <i
+                          class="fa fa-sort"
+                          style="background-color: #0e0342"
+                          onclick="toggleSort(1)"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="sort-header">
+                        검사방법
+                        <i
+                          class="fa fa-sort"
+                          style="background-color: #0e0342"
+                          onclick="toggleSort(2)"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="sort-header">
+                        입력일
+                        <i
+                          class="fa fa-sort"
+                          style="background-color: #0e0342"
+                          onclick="toggleSort(3)"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="sort-header">
+                        직반장사번
+                        <i
+                          class="fa fa-sort"
+                          style="background-color: #0e0342"
+                          onclick="toggleSort(4)"
+                        ></i>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="sort-header">
+                        용접사사번
+                        <i
+                          class="fa fa-sort"
+                          style="background-color: #0e0342"
+                          onclick="toggleSort(5)"
+                        ></i>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- 테이블 내용이 여기에 추가됩니다 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function menudisplay(menu1, menu2, menu3, selectedlink) {
+        const arrCollectionLink =
+          document.getElementsByClassName("collection-link");
+        for (cl of arrCollectionLink) {
+          cl.classList.remove("menu_selected");
+        }
+        const collectionlink = document.getElementById(selectedlink);
+        collectionlink.classList.add("menu_selected");
+
+        const first_menu = document.getElementById("first_menu");
+        first_menu.innerHTML = `<i class="fa-solid fa-list"></i>&nbsp&nbsp&nbsp${menu1}`;
+
+        const second_menu = document.getElementById("second_menu");
+        second_menu.innerText = menu2;
+        second_menu.style.visibility = "visible"; // 조회 항목 표시
+
+        const third_menu = document.getElementById("third_menu");
+        third_menu.innerText = menu3;
+        third_menu.style.visibility = "visible"; // 프로젝트 항목 표시
+      }
+
+      let selectedLink = null; // 선택된 링크를 추적하는 변수
+      let myPieChart = null; // 차트를 저장하는 전역 변수로 초기화
+      let weldingDataList = [];
+
+      let sortOrder = {}; // 각 컬럼의 정렬 상태를 저장할 객체
+
+      function toggleSort(columnIndex) {
+        // 현재 정렬 상태 확인
+        const currentOrder = sortOrder[columnIndex] || "asc";
+
+        // 새 정렬 상태 결정
+        const newOrder = currentOrder === "asc" ? "desc" : "asc";
+
+        // 테이블 정렬
+        sortTable(columnIndex, newOrder);
+
+        // 해당 컬럼의 아이콘 업데이트
+        updateSortIcon(columnIndex, newOrder);
+
+        // 정렬 상태 저장
+        sortOrder[columnIndex] = newOrder;
+      }
+
+      function filterTable() {
+        const input = document.getElementById("tableSearch");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("data-table");
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+          const tds = tr[i].getElementsByTagName("td");
+          let showRow = false;
+
+          for (let j = 0; j < tds.length; j++) {
+            if (tds[j].textContent.toLowerCase().indexOf(filter) > -1) {
+              showRow = true;
+              break;
+            }
+          }
+
+          if (showRow) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+
+      function updateSortIcon(columnIndex, order) {
+        // 모든 컬럼의 아이콘을 초기화
+        const allIcons = document.querySelectorAll(".sort-header i");
+        allIcons.forEach((icon) => {
+          icon.classList.remove("fa-sort-up", "fa-sort-down");
+          icon.classList.add("fa-sort"); // 기본 화살표로 초기화
+        });
+
+        // 클릭한 컬럼의 아이콘 업데이트
+        const targetIcon =
+          document.querySelectorAll(".sort-header i")[columnIndex];
+        if (order === "asc") {
+          targetIcon.classList.remove("fa-sort");
+          targetIcon.classList.add("fa-sort-up"); // 오름차순
+        } else {
+          targetIcon.classList.remove("fa-sort");
+          targetIcon.classList.add("fa-sort-down"); // 내림차순
+        }
+      }
+
+      function sortTable(columnIndex, order) {
+        const table = document.getElementById("data-table");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        const sortedRows = rows.sort((a, b) => {
+          const aText = a.cells[columnIndex].textContent.trim();
+          const bText = b.cells[columnIndex].textContent.trim();
+
+          if (order === "asc") {
+            return aText.localeCompare(bText, undefined, { numeric: true });
+          } else {
+            return bText.localeCompare(aText, undefined, { numeric: true });
+          }
+        });
+
+        // 정렬된 행을 테이블에 다시 추가
+        sortedRows.forEach((row) => tbody.appendChild(row));
+      }
+
+      async function loadWeldingData(shipType) {
+        try {
+          const response = await fetch(`/api/welding-data?type=${shipType}`);
+          const data = await response.json();
+
+          const { weldingData, weldingDataList: list } = data;
+          weldingDataList = list; // 테이블에 사용할 데이터를 저장
+
+          console.log("차트용 데이터:", weldingData);
+          console.log("테이블용 데이터:", weldingDataList);
+
+          // 차트 업데이트 (기존 로직 유지)
+          const chartCanvas = document.getElementById("myPieChart");
+          const ctx = chartCanvas.getContext("2d");
+
+          const labels = weldingData.map((item) => item._id);
+          const values = weldingData.map((item) => item.count);
+
+          if (myPieChart) {
+            myPieChart.destroy();
+          }
+
+          if (values.length === 0) {
+            // 데이터가 없을 경우 차트에 메시지 표시
+            ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+            ctx.font = "50px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText(
+              "불량없음",
+              chartCanvas.width / 2,
+              chartCanvas.height / 2
+            );
+          } else {
+            myPieChart = new Chart(ctx, {
+              type: "pie", // 파이차트로 변경
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    data: values,
+                    backgroundColor: [
+                      "#FF6F61",
+                      "#6B5B95",
+                      "#88B04B",
+                      "#F7CAC9",
+                      "#92A8D1",
+                    ],
+                    hoverOffset: 20,
+                  },
+                ],
+              },
+              options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                layout: {
+                  padding: 5,
+                },
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: "top", // 라벨이 차트 위에 위치
+                    labels: {
+                      padding: 10, // 라벨 내부의 패딩을 설정 (간격 조절 가능)
+                    },
+                  },
+                  tooltip: {
+                    enabled: true, // 툴팁 활성화
+                    bodyFont: {
+                      size: 16, // 툴팁 텍스트 크기 설정
+                    },
+                    callbacks: {
+                      title: () => {
+                        return ""; // 타이틀을 제거하기 위해 빈 배열 반환
+                      },
+                      label: (tooltipItem) => {
+                        const label = tooltipItem.label;
+                        const value = tooltipItem.raw;
+                        const total = tooltipItem.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0
+                        );
+                        const percentage = ((value / total) * 100).toFixed(2);
+                        return `${label}: ${value}개 (${percentage}%)`; // 레이블, 값, 비율 모두 표시
+                      },
+                    },
+                  },
+                  datalabels: {
+                    display: (context) => {
+                      const value = context.dataset.data[context.dataIndex];
+                      const total = context.dataset.data.reduce(
+                        (a, b) => a + b,
+                        0
+                      );
+                      const percentage = value / total;
+                      return percentage >= 0.05; // 5% 이상만 표시
+                    },
+                    color: "black",
+                    font: {
+                      size: 18, // 데이터 레이블 텍스트 크기 설정
+                    },
+                    formatter: (value, context) => {
+                      const label =
+                        context.chart.data.labels[context.dataIndex];
+                      const total = context.dataset.data.reduce(
+                        (a, b) => a + b,
+                        0
+                      );
+                      const percentage = ((value / total) * 100).toFixed(2);
+                      return `${label}: ${value}개 (${percentage}%)`;
+                    },
+                  },
+                },
+              },
+              plugins: [ChartDataLabels], // ChartDataLabels 플러그인 활성화
+            });
+          }
+
+          // 차트 클릭 이벤트 추가
+          chartCanvas.onclick = function (event) {
+            const activePoints = myPieChart.getElementsAtEventForMode(
+              event,
+              "nearest",
+              { intersect: true },
+              true
+            );
+
+            if (activePoints.length > 0) {
+              const chartDataIndex = activePoints[0].index;
+              const selectedLabel = myPieChart.data.labels[chartDataIndex];
+
+              // 선택된 차트 섹션에 맞게 데이터 필터링
+              const filteredData = weldingDataList.filter(
+                (row) => row["사유코드 설명"] === selectedLabel
+              );
+
+              // 테이블 업데이트
+              updateTable(filteredData);
+            }
+          };
+
+          // 초기 테이블 데이터 (전체 데이터를 테이블에 표시)
+          updateTable(weldingDataList);
+
+          // 정렬 상태 초기화
+          resetSorting();
+        } catch (error) {
+          console.error("데이터를 로드하는 중 오류 발생:", error);
+        }
+      }
+
+      function resetSorting() {
+        // 정렬 상태 초기화
+        sortOrder = {};
+
+        // 모든 컬럼의 아이콘을 초기화
+        const allIcons = document.querySelectorAll(".sort-header i");
+        allIcons.forEach((icon) => {
+          icon.classList.remove("fa-sort-up", "fa-sort-down");
+          icon.classList.add("fa-sort"); // 기본 화살표로 초기화
+        });
+      }
+
+      // 테이블 업데이트 함수
+      function updateTable(data) {
+        const tableBody = document.querySelector("#data-table tbody");
+        tableBody.innerHTML = ""; // 기존 행 삭제
+
+        // 필터링된 데이터를 사용하여 테이블에 새로운 행 추가
+        data.forEach((row) => {
+          const newRow = document.createElement("tr");
+
+          // 각 데이터를 테이블 행에 추가
+          newRow.innerHTML = `
+          <td>${row.프로젝트 || "N/A"}</td>
+          <td>${row.업체구분 || "N/A"}</td>
+          <td>${row.검사방법 || "N/A"}</td>
+          <td>${row.검사실적입력일 || "N/A"}</td>
+          <td>${row.직반장사번 || "N/A"}</td>
+          <td>${row.용접사사번 || "N/A"}</td>
+        `;
+
+          // 테이블 본문에 행 추가
+          tableBody.appendChild(newRow);
+        });
+      }
+
+      // 사이드 메뉴 클릭 시 데이터 로드 및 차트와 테이블 업데이트
+      document.querySelectorAll(".collection-link").forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          event.preventDefault(); // 기본 링크 동작 방지
+
+          // 이전에 선택된 링크의 'selected' 클래스 제거
+          if (selectedLink) {
+            selectedLink.classList.remove("selected");
+          }
+
+          // 현재 클릭된 링크에 'selected' 클래스 추가
+          link.classList.add("selected");
+          selectedLink = link; // 현재 클릭된 링크를 추적
+
+          // 선택된 항목에 맞는 데이터 로드
+          const filterType = link.getAttribute("data-type");
+          loadWeldingData(filterType); // 데이터를 로드하고 차트 및 테이블 업데이트
+        });
+      });
+
+      // 서버에서 사용자 정보를 가져와서 화면에 표시
+      fetch("/user-info")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.name) {
+            document.getElementById(
+              "welcome-message"
+            ).textContent = `${data.name}님 반갑습니다.`;
+          }
+        })
+        .catch((err) => {
+          console.error("사용자 정보를 가져오는 중 오류 발생:", err);
+        });
+
+      // 로그아웃 함수: 로그아웃 클릭 시 로그아웃 페이지로 이동
+      function logout() {
+        localStorage.removeItem("welcomeShown"); // 환영 메시지 상태 초기화
+        localStorage.removeItem("activeTab"); // 탭 상태 초기화
+        location.href = "/logout"; // 로그아웃 요청
+      }
+    </script>
+
+    <!-- 탭 활성화 상태를 로컬 스토리지에 저장하고 복원하는 기능 -->
+    <script>
+      // 페이지가 로드될 때 URL에 맞는 탭을 활성화
+      document.addEventListener("DOMContentLoaded", function () {
+        const activeTab = localStorage.getItem("activeTab");
+        const currentPath = window.location.pathname;
+
+        let tabToActivate;
+
+        // URL 경로에 따라 적절한 탭 설정
+        if (currentPath.includes("first")) {
+          tabToActivate = "tab1";
+        } else if (currentPath.includes("second")) {
+          tabToActivate = "tab2";
+        } else if (currentPath.includes("third")) {
+          tabToActivate = "tab3";
+        } else if (currentPath.includes("sixth")) {
+          tabToActivate = "tab4";
+        }
+
+        if (tabToActivate) {
+          // 모든 탭에서 active 클래스 제거
+          document.querySelectorAll(".nav-link").forEach(function (tab) {
+            tab.classList.remove("active");
+          });
+          // URL에 맞는 탭에 active 클래스 추가
+          document.getElementById(tabToActivate).classList.add("active");
+          localStorage.setItem("activeTab", tabToActivate); // 활성화된 탭 상태 저장
+        }
+      });
+    </script>
+
+    <script>
+      // 첫 화면 로드 시 COT 항목을 클릭한 것처럼 동작
+      window.addEventListener("DOMContentLoaded", function () {
+        var defaultActive = document.getElementById("collection-link1");
+        if (defaultActive) {
+          defaultActive.click(); // COT 항목을 클릭한 것처럼 트리거
+        }
+      });
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+  </body>
+</html>

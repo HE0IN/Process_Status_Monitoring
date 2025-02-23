@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공정현황</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        /* border: 1px solid; */
+        box-sizing: border-box;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      body {
+        background-color: #cee3f6;
+        height: 100vh;
+        background-image: url("/img/picture.png");
+        background-size: 100%; /* 이미지 크기를 50%로 축소 */
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      #header {
+        height: 100px;
+        /* width: 100%; */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        gap: 10px;
+      }
+
+      #header img {
+        height: 80px;
+        width: 105px;
+        margin-left: 0;
+        display: block;
+      }
+
+      #header-left {
+        margin: 0;
+      }
+
+      .hbutton {
+        margin-left: 20px;
+        background: none;
+        border: none;
+        color: black;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      #header button:hover {
+        text-decoration: underline;
+      }
+
+      #login-button {
+        background-color: #0e0342;
+        color: white;
+        padding: 5px 20px;
+        border-radius: 20px;
+        border: 3px solid black;
+        margin-left: 30px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+        width: 120px;
+        height: 40px;
+      }
+
+      #container {
+        display: flex;
+        width: 100%;
+        padding: 20px;
+      }
+
+      #main-content {
+        flex: 1;
+        padding-right: 20px;
+      }
+
+      #main {
+        text-align: center;
+      }
+
+      h2 {
+        color: #0e0342;
+        font-size: 32px;
+        font-weight: bold;
+        height: 100%;
+        line-height: 1.2;
+        align-content: center;
+        margin-bottom: 0px;
+      }
+
+      .img2 {
+        margin-top: 100px;
+        margin-left: 100px;
+      }
+
+      .weather-card {
+        background-color: transparent;
+        border: none;
+        box-shadow: none; /* 그림자 제거 */
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        font-size: 16px;
+        color: white; /* 글자 색상 흰색 */
+        margin-right: 50px;
+        margin-top: -50px;
+      }
+
+      .weather-card p {
+        margin: 0; /* 모든 여백 제거 */
+        padding: 0; /* 모든 패딩 제거 */
+        color: white;
+        font-size: 20px;
+        font-weight: normal;
+      }
+
+      #right-sidebar {
+        background-color: transparent; /* 사이드바 배경도 투명으로 설정 */
+        box-shadow: none; /* 그림자 제거 */
+        padding: 0; /* 패딩 제거 */
+        margin: 0; /* 여백 제거 */
+      }
+
+      #weekly-weather {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .weather-icon {
+        width: 80px; /* 아이콘 너비 150px */
+        height: 80px; /* 아이콘 높이 150px */
+        margin: 10px 0;
+      }
+
+      .container-fluid {
+        height: 80vh;
+        padding: 24px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      #footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0); /* 배경을 투명하게 설정 */
+        padding: 20px 0;
+        box-shadow: none; /* 기존에 설정된 그림자 제거 */
+        border: none; /* 경계선 제거 */
+      }
+
+      /* footer 안에 내용들을 양쪽으로 배치 */
+      .footer_desc {
+        display: flex;
+        justify-content: space-between; /* fhead와 fcontact를 양쪽 끝에 배치 */
+        align-items: center; /* 수직으로 가운데 정렬 */
+        width: 100%; /* 전체 화면 너비 사용 */
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      /* fhead에 대한 추가 스타일링 */
+      .fhead .copyright {
+        margin: 0;
+        font-size: 14px;
+        color: white;
+        padding-left: 20px;
+      }
+
+      /* fcontact의 SNS 아이콘 스타일링 */
+      .fcontact {
+        text-align: right; /* 텍스트와 아이콘 오른쪽 정렬 */
+      }
+
+      .fcontact .FSNS {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        padding-right: 40px;
+        display: flex;
+        gap: 15px; /* 아이콘 사이 간격 */
+        margin-bottom: 15px;
+      }
+
+      .fcontact .FSNS li a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* fcontact의 연락처 텍스트 스타일 */
+      .fcontact_text {
+        margin: 5px 0;
+        font-size: 12px;
+        color: white;
+        padding-right: 40px;
+      }
+
+      /* 반응형 디자인: 모바일 화면에서 수직 정렬 */
+      @media (max-width: 768px) {
+        .footer_desc {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+        .fcontact .FSNS {
+          margin-top: 10px;
+        }
+      }
+
+      .chart {
+        border: 1px solid #0e0342;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: center;
+        background-color: transparent; /* 완전 투명 */
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none; /* 링크 밑줄 없애기 */
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      #chart1:hover {
+        background-image: url("/img/개정도.png");
+        background-position: center;
+        background-size: cover;
+        text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+          1px 1px 0 black; /* 글자 테두리 */
+      }
+      #chart2:hover {
+        background-image: url("/img/설계현황.png");
+        background-position: center;
+        background-size: cover;
+        text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+          1px 1px 0 black; /* 글자 테두리 */
+      }
+      #chart3:hover {
+        background-image: url("/img/생산설계.png");
+        background-position: center;
+        background-size: cover;
+        text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+          1px 1px 0 black; /* 글자 테두리 */
+      }
+      #chart4:hover {
+        background-image: url("/img/용접현황.png");
+        background-position: center;
+        background-size: cover;
+        text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
+          1px 1px 0 black; /* 글자 테두리 */
+      }
+
+      #chart1,
+      #chart2,
+      #chart3,
+      #chart4 {
+        position: relative;
+        overflow: hidden; /* 자식 요소가 부모를 넘어서지 않도록 */
+      }
+
+      #chart1::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("/img/개정도.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.5; /* 투명도 설정 */
+        z-index: -1; /* 이미지가 글자보다 뒤에 위치하도록 */
+      }
+
+      #chart2::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("/img/설계현황.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.5; /* 투명도 설정 */
+        z-index: -1;
+      }
+
+      #chart3::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("/img/생산설계.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.5; /* 투명도 설정 */
+        z-index: -1;
+      }
+
+      #chart4::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("/img/용접현황.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.5; /* 투명도 설정 */
+        z-index: -1;
+      }
+
+      /* 기본 weather-row 설정 */
+      .weather-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background-color: transparent; /* 기본적으로 투명 */
+        height: 60px;
+        width: 400px;
+      }
+
+      .weather-date {
+        flex: 1;
+        text-align: left;
+        padding: 5px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+
+      /* 오늘 날짜 박스 */
+      .today-box {
+        background-color: rgba(255, 255, 255, 1); /* 오늘만 불투명 */
+        margin-top: 400px;
+      }
+
+      .tomorrow-box,
+      .day-after-tomorrow-box {
+        background-color: rgba(255, 255, 255, 0.3); /* 내일과 모레는 투명하게 */
+      }
+
+      .weather-time,
+      .weather-icon,
+      .weather-temperature {
+        background-color: none;
+        padding: 5px;
+        border-radius: 5px;
+      }
+      .chart-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2열 */
+        grid-template-rows: repeat(2, 1fr); /* 2행 */
+        gap: 10px;
+        flex: 0 0 30%; /* 차트 컨테이너는 전체 화면의 60% 고정 */
+        margin-top: 170px;
+      }
+      .inline-container {
+        display: flex;
+        justify-content: space-between; /* 차트와 날씨 정보를 양 옆으로 배치 */
+        width: 100%; /* 전체 화면 너비 사용 */
+        padding: 20px;
+      }
+      .weather-container {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 17%; /* 날씨 컨테이너는 전체 화면의 35% 고정 */
+        padding-left: 20px; /* 약간의 여백 추가 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid p-4">
+      <div id="header">
+        <div id="header-left" style="display: flex; gap: 20px">
+          <a href="/">
+            <img src="/img/samsung.png" alt="Logo" id="img1" />
+          </a>
+          <div class="center"><h2>SHI Process Condition</h2></div>
+        </div>
+        <div id="list">
+          <button class="hbutton" onclick="navigate('first')">
+            개정도 현황
+          </button>
+          <button class="hbutton" onclick="navigate('second')">
+            설계 요청 현황
+          </button>
+          <button class="hbutton" onclick="navigate('third')">생산설계</button>
+          <button class="hbutton" onclick="navigate('sixth')">용접 현황</button>
+        </div>
+        <div>
+          <span id="welcome-message"></span>
+          <button id="login-button" onclick="location.href='login';">
+            로그인
+          </button>
+
+          <!-- 로그인 메시지 표시 -->
+        </div>
+      </div>
+      <div id="container">
+        <div id="main-content"></div>
+      </div>
+      <!-- 컨테이너 추가 -->
+      <div class="inline-container">
+        <!-- 차트 컨테이너 -->
+        <div class="chart-container">
+          <div
+            class="chart"
+            id="chart1"
+            onclick="navigateWithLoginCheck('first.html')"
+          >
+            개정도 현황
+          </div>
+          <div
+            class="chart"
+            id="chart2"
+            onclick="navigateWithLoginCheck('second.html')"
+          >
+            설계 요청 현황
+          </div>
+          <div
+            class="chart"
+            id="chart3"
+            onclick="navigateWithLoginCheck('third.html')"
+          >
+            생산설계
+          </div>
+          <div
+            class="chart"
+            id="chart4"
+            onclick="navigateWithLoginCheck('sixth.html')"
+          >
+            용접 현황
+          </div>
+        </div>
+
+        <!-- 날씨 컨테이너 -->
+        <div class="weather-container" id="right-sidebar">
+          <div id="weekly-weather"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 푸터 탭 생성 -->
+    <div id="footer">
+      <div class="footer_desc">
+        <div class="fhead">
+          <p class="copyright">
+            COPYRIGHT©
+            <span class="point">SAMSUNG HEAVY INDUSTRIES</span>
+            <br class="mmmView" />
+            CO., LTD. ALL RIGHTS RESERVED.
+          </p>
+        </div>
+        <div class="fcontact">
+          <ul class="FSNS">
+            <li>
+              <a href="https://www.youtube.com/user/samsungshi" target="_blank">
+                <i class="fa-brands fa-youtube fa-2xl" style="color: white"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://blog.samsungshi.com" target="_blank">
+                <i
+                  class="fa-brands fa-microblog fa-2xl"
+                  style="color: white"
+                ></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/hyi__26" target="_blank">
+                <i
+                  class="fa-brands fa-instagram fa-2xl"
+                  style="color: white"
+                ></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/su_kk05" target="_blank">
+                <i
+                  class="fa-brands fa-instagram fa-2xl"
+                  style="color: white"
+                ></i>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.instagram.com/sooooooooooyoen"
+                target="_blank"
+              >
+                <i
+                  class="fa-brands fa-instagram fa-2xl"
+                  style="color: white"
+                ></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/sjho_on" target="_blank">
+                <i
+                  class="fa-brands fa-instagram fa-2xl"
+                  style="color: white"
+                ></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/kk_jjww" target="_blank">
+                <i
+                  class="fa-brands fa-instagram fa-2xl"
+                  style="color: white"
+                ></i>
+              </a>
+            </li>
+          </ul>
+          <p class="fcontact_text">경남 거제시 장평2길 4로 11, 106동 1420호</p>
+          <p class="fcontact_text">대표전화: 055-680-1234</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 로그인 상태 확인 및 환영 메시지 표시 -->
+    <script>
+      var isLoggedIn = false;
+
+      // 메인 미리보기 화면 로그인 후 현황으로 넘어갈 수 있게
+      function navigateWithLoginCheck(url) {
+        // 로그인 상태 확인
+        if (!isLoggedIn) {
+          alert("로그인 해주세요.");
+        } else {
+          window.location.href = url;
+        }
+      }
+      // 서버에서 로그인 상태 확인
+      fetch("/is-logged-in")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("로그인 상태:", data); // 로그인 상태 콘솔 출력
+          isLoggedIn = data.loggedIn;
+          const name = data.name; // 사용자 이름 가져오기
+
+          if (isLoggedIn) {
+            document.getElementById("login-button").textContent = "로그아웃";
+            document
+              .getElementById("login-button")
+              .setAttribute("onclick", "location.href='/logout';");
+            document.getElementById(
+              "welcome-message"
+            ).textContent = `${name}님 반갑습니다.`;
+
+            // 로그인 후 처음 메인 페이지로 왔다면 환영 메시지 표시
+            const welcomeShown = localStorage.getItem("welcomeShown");
+            console.log("환영 메시지 상태:", welcomeShown); // 환영 메시지 상태 출력
+
+            if (!welcomeShown) {
+              console.log("환영 메시지 표시 준비됨");
+              setTimeout(() => {
+                alert("환영합니다!"); // 환영 메시지를 약간의 딜레이 후에 표시
+                localStorage.setItem("welcomeShown", "true");
+                console.log("환영 메시지 표시됨");
+              }, 500); // 0.5초 딜레이 추가
+            } else {
+              console.log("이미 환영 메시지가 표시됨");
+            }
+          } else {
+            document.getElementById("welcome-message").textContent =
+              "로그인 해주세요.";
+          }
+        })
+        .catch((error) => {
+          console.error("로그인 상태 확인 중 오류 발생:", error);
+        });
+    </script>
+
+    <script>
+      // 페이지가 로드될 때 URL에 맞는 탭을 활성화
+      document.addEventListener("DOMContentLoaded", function () {
+        const activeTab = localStorage.getItem("activeTab");
+        const currentPath = window.location.pathname;
+
+        let tabToActivate;
+
+        // URL 경로에 따라 적절한 탭 설정
+        if (currentPath.includes("first")) {
+          tabToActivate = "tab1";
+        } else if (currentPath.includes("second")) {
+          tabToActivate = "tab2";
+        } else if (currentPath.includes("third")) {
+          tabToActivate = "tab3";
+        } else if (currentPath.includes("sixth")) {
+          tabToActivate = "tab4";
+        }
+
+        if (tabToActivate) {
+          // 모든 탭에서 active 클래스 제거
+          document.querySelectorAll(".nav-link").forEach(function (tab) {
+            tab.classList.remove("active");
+          });
+          // URL에 맞는 탭에 active 클래스 추가
+          document.getElementById(tabToActivate).classList.add("active");
+          localStorage.setItem("activeTab", tabToActivate); // 활성화된 탭 상태 저장
+        }
+      });
+    </script>
+
+    <!-- 네비게이션 버튼 클릭 시 로그인 여부 확인 및 페이지 이동 -->
+    <script>
+      function navigate(url) {
+        if (!isLoggedIn) {
+          alert("로그인 해주세요.");
+        } else {
+          location.href = url;
+        }
+      }
+    </script>
+
+    <!-- 로그아웃 버튼 기능 -->
+    <script>
+      // 로그아웃 함수: 로그아웃 클릭 시 로그아웃 페이지로 이동
+      function logout() {
+        localStorage.removeItem("welcomeShown"); // 환영 메시지 상태 초기화
+        localStorage.removeItem("activeTab"); // 탭 상태 초기화
+        location.href = "/logout"; // 로그아웃 요청
+      }
+    </script>
+
+    <script>
+      // WeatherAPI를 사용하여 주간 날씨 데이터 가져오기
+      window.onload = function () {
+        fetchWeeklyWeather();
+      };
+
+      function fetchWeeklyWeather() {
+        const apiKey = "7c649e8cad2a487295c64148240409"; // WeatherAPI key
+        const lat = 34.8806427;
+        const lon = 128.6210824;
+        const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${lat},${lon}&days=7&lang=ko`;
+
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            const dailyWeather = data.forecast.forecastday;
+
+            let weatherHtml = "";
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(today.getDate() + 2);
+
+            dailyWeather.forEach((day, index) => {
+              const date = new Date(day.date);
+              const iconUrl = day.day.condition.icon;
+              const temperatureMax = day.day.maxtemp_c;
+              const temperatureMin = day.day.mintemp_c;
+              const description = day.day.condition.text;
+
+              // 날짜에 따라 클래스를 다르게 적용
+              let dateClass = "";
+              if (date.toDateString() === today.toDateString()) {
+                dateClass = "today-box"; // 오늘
+              } else if (date.toDateString() === tomorrow.toDateString()) {
+                dateClass = "tomorrow-box"; // 내일
+              } else if (
+                date.toDateString() === dayAfterTomorrow.toDateString()
+              ) {
+                dateClass = "day-after-tomorrow-box"; // 모레
+              }
+
+              weatherHtml += `
+          <div class="weather-row ${dateClass}">
+            <div class="weather-date">${day.date}</div>
+            <div class="weather-time">오전 오후</div>
+            <img src="https:${iconUrl}" class="weather-icon" alt="${description}" />
+            <div class="weather-temperature">${temperatureMin}° / ${temperatureMax}°</div>
+          </div>
+        `;
+            });
+
+            document.getElementById("weekly-weather").innerHTML = weatherHtml;
+          })
+          .catch((error) => {
+            console.error("Error fetching weekly weather data:", error);
+            document.getElementById("weekly-weather").textContent =
+              "주간 날씨 정보를 불러올 수 없습니다.";
+          });
+      }
+    </script>
+  </body>
+</html>

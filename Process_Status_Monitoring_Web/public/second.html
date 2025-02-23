@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>설계 요청 현황</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+      integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        background-color: #cee3f6;
+        /* border: 1px solid; */
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+      #header {
+        height: 100px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        gap: 10px;
+      }
+      #header img {
+        height: 80px;
+        width: 105px;
+        margin-left: 0px;
+      }
+      #nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #cee3f6;
+        color: black;
+        padding: 10px;
+      }
+      .breadcrumb {
+        margin-bottom: 0;
+        background-color: transparent; /* 배경색 제거 */
+        margin-left: 45px;
+        font-size: 18px; /* 원하는 크기로 설정 */
+      }
+      /* first_menu의 글자 색상과 밑줄 제거 */
+      #first_menu {
+        color: #0e0342; /* 글자 색상을 원하는 색으로 변경 */
+        text-decoration: none; /* 밑줄 제거 */
+        font-weight: bold;
+      }
+      ul li a:hover {
+        background-color: #e0f2f7; /* 호버 시 배경색 변경 */
+      }
+      ul {
+        text-decoration: none;
+        list-style: none;
+      }
+      ul li {
+        display: inline;
+      }
+      ul li a {
+        display: block;
+        padding: 10px 20px;
+        text-decoration: none;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      h2 {
+        color: #0e0342;
+        font-size: 32px;
+        font-weight: bold;
+        height: 100%;
+        line-height: 1.2;
+        align-content: center;
+        margin-bottom: 0px;
+      }
+      .custom-button {
+        background-color: #0e0342;
+        color: white;
+        padding: 5px 20px;
+        border-radius: 20px;
+        border: 3px solid black;
+        margin-left: 30px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .custom-button:hover {
+        background-color: #0e0342;
+        color: white;
+        text-decoration: underline;
+      }
+
+      .nav-tabs .nav-item .nav-link {
+        color: black;
+        border-radius: 15px;
+        padding: 10px 20px;
+        margin-right: 10px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .nav-tabs .nav-item .nav-link.active {
+        background-color: #3a285e;
+        color: white;
+      }
+
+      .nav-tabs .nav-item .nav-link:hover {
+        background-color: #4b386f;
+        color: white;
+      }
+
+      .nav-tabs {
+        border-bottom: none;
+      }
+
+      #aside {
+        border-right: 5px solid #3a285e;
+        padding: 15px;
+        height: 650px;
+        margin-bottom: 15px;
+      }
+
+      #section {
+        padding-left: 15px; /* 구분선과의 간격 */
+      }
+
+      #welcome-message {
+        display: inline-block;
+        border-bottom: 1px solid;
+        padding-bottom: 4px;
+      }
+      .collection-link {
+        background-color: transparent;
+        border: 0px;
+      }
+      .accordion-body ul {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .accordion-body li {
+        flex: 1; /* 각 li 요소들이 동일한 너비를 가짐 */
+      }
+      .aside-link {
+        text-decoration: none;
+        color: black;
+      }
+      .selected {
+        background-color: white;
+        color: #000;
+      }
+      .accordion-button {
+        background-color: #cee3f6;
+        color: black;
+        border: none;
+      }
+
+      table {
+        width: 100%; /* 테이블 너비 전체 설정 */
+        table-layout: fixed; /* 고정된 열 너비 */
+        border-collapse: separate; /* 셀 테두리와 내용 간 간격 추가 */
+      }
+
+      .sort-header {
+        color: black;
+        border: none; /* 테두리 제거 */
+        padding: 0; /* 기본 여백 제거 */
+        appearance: none; /* 기본 스타일 제거 */
+        box-shadow: none; /* 버튼 그림자 제거 */
+        cursor: pointer; /* 마우스 커서 스타일 설정 */
+      }
+
+      .sort-header i {
+        background-color: transparent; /* 아이콘 배경색을 헤더와 동일하게 */
+        margin-left: 5px; /* 아이콘과 텍스트 간의 간격 조정 */
+        color: white; /* 아이콘 색상도 흰색으로 변경 */
+      }
+
+      /* 추가적으로 버튼이 눌린 상태일 때 생기는 그림자 제거 */
+      .sort-header:focus {
+        outline: none; /* 포커스 시 생기는 테두리 제거 */
+        box-shadow: none; /* 포커스 시 그림자 제거 */
+      }
+
+      tbody td {
+        text-align: center; /* 텍스트 가운데 정렬 */
+        border: 1px solid #0e0342; /* 셀 테두리 설정 */
+        border-radius: 5px; /* 셀 테두리 둥글게 */
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        overflow: hidden; /* 넘치는 텍스트 숨김 */
+        text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
+        padding: 8px; /* 셀 내부 여백 */
+      }
+      table,
+      th,
+      td {
+        text-align: center; /* 텍스트 가운데 정렬 */
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        overflow: hidden; /* 넘치는 텍스트 숨김 */
+        text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
+      }
+      th,
+      td {
+        border-radius: 5px; /* 테두리 둥글게 */
+      }
+      thead th {
+        background-color: #0e0342 !important;
+        border: 1px solid #0e0342; /* 셀 테두리 설정 */
+        color: white !important;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .reset-button {
+        background-color: #0e0342; /* 초기화 버튼 배경색 */
+        color: white;
+        border: none;
+        height: 50px;
+        width: 110px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+      }
+
+      .reset-button:hover {
+        background-color: #231c46; /* 버튼 호버 시 색상 */
+      }
+      #no-data-message {
+        font-size: 18px;
+        color: red;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid p-4">
+      <div id="header">
+        <div id="header-left" style="display: flex; gap: 20px">
+          <a href="/">
+            <img src="/img/samsung.png" alt="Logo" id="img1" />
+          </a>
+          <div class="center"><h2>SHI Process Condition</h2></div>
+        </div>
+        <div
+          id="header-right"
+          style="display: flex; align-items: center; gap: 20px"
+        >
+          <p id="welcome-message" style="margin-top: 15px">님 반갑습니다.</p>
+          <button type="button" class="custom-button" onclick="logout()">
+            로그아웃
+          </button>
+        </div>
+      </div>
+
+      <div id="nav" class="box">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" id="tab1" href="./first">개정도 현황</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tab2" href="./second">설계 요청 현황</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tab3" href="./third">생산설계</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tab4" href="./sixth">용접 현황</a>
+          </li>
+        </ul>
+      </div>
+      <!-- 브레드크럼 위치 -->
+      <nav
+        style="--bs-breadcrumb-divider: '>>'"
+        aria-label="breadcrumb"
+        class="my-2"
+        id="mybreadcrumb"
+      >
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="./second" id="first_menu"
+              ><i class="fa-solid fa-list"></i>&nbsp&nbsp&nbsp설계 요청 현황</a
+            >
+          </li>
+          <li
+            class="breadcrumb-item"
+            id="second_menu"
+            style="visibility: hidden"
+          >
+            <a href="#">프로젝트명</a>
+          </li>
+          <li
+            class="breadcrumb-item active"
+            aria-current="page"
+            id="third_menu"
+            style="visibility: hidden"
+          >
+            프로젝트
+          </li>
+        </ol>
+      </nav>
+
+      <!-- 아래에 긴급도 및 중요도 섹션 추가 -->
+      <div id="main" class="col-12 d-flex">
+        <div
+          id="aside"
+          class="col-2 d-flex flex-column justify-content-between m-4"
+        >
+          <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  style="
+                    box-shadow: none;
+                    background-color: #cee3f6;
+                    border: solid 1px #0e0342;
+                    border-radius: 10px;
+                    font-weight: bold;
+                  "
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseOne"
+                >
+                  프로젝트명
+                </button>
+              </h2>
+              <div
+                id="flush-collapseOne"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#accordionFlushExample"
+              >
+                <div class="accordion-body m-0 p-0">
+                  <ul class="m-0 p-0">
+                    <li>
+                      <a
+                        href=""
+                        data-db="설계변경요청현황"
+                        data-collection="설계변경요청_P1"
+                        class="collection-link aside-link active"
+                        id="collection-link1"
+                        onclick="menudisplay('설계 요청 현황','프로젝트명','Project_1', 'collection-link1')"
+                        >P1</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href=""
+                        data-db="설계변경요청현황"
+                        data-collection="설계변경요청_P2"
+                        class="collection-link aside-link"
+                        id="collection-link2"
+                        onclick="menudisplay('설계 요청 현황','프로젝트명','Project_2', 'collection-link2')"
+                        >P2</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        href=""
+                        data-db="설계변경요청현황"
+                        data-collection="설계변경요청_P3"
+                        class="collection-link aside-link"
+                        id="collection-link3"
+                        onclick="menudisplay('설계 요청 현황','프로젝트명','Project_3', 'collection-link3')"
+                        >P3</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="section" class="col-9">
+          <h5 style="margin-top: 30px; margin-bottom: 8px; font-weight: bold">
+            <span style="color: red">왼쪽 프로젝트명을 선택한 후</span> 긴급도
+            및 중요도를 선택해주세요.
+          </h5>
+
+          <div
+            class="d-flex justify-content-between align-items-center"
+            style="margin-bottom: 8px"
+          >
+            <div class="d-flex gap-3 align-items-center">
+              <span style="font-weight: bold">긴급도 :</span>
+              <div class="dropdown">
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="urgencyDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  긴급도
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item urgency-option" href="#">상</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item urgency-option" href="#">중</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item urgency-option" href="#">하</a>
+                  </li>
+                </ul>
+              </div>
+              <span style="font-weight: bold">중요도 :</span>
+              <div class="dropdown">
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  id="importanceDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  중요도
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item importance-option" href="#">High</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item importance-option" href="#"
+                      >Medium</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item importance-option" href="#">Low</a>
+                  </li>
+                </ul>
+                <h7 style="margin-left: 20px"
+                  >(프로젝트명 P1, 긴급도 상, 중요도 High가 기본값으로 선택되어
+                  있습니다.)</h7
+                >
+              </div>
+            </div>
+
+            <!-- 정렬 초기화 버튼을 오른쪽에 배치 -->
+            <div style="display: flex; justify-content: flex-end">
+              <button
+                class="reset-button"
+                onclick="resetTable()"
+                style="margin-right: 22px"
+              >
+                정렬 초기화
+              </button>
+            </div>
+          </div>
+
+          <div
+            style="
+              max-height: 550px;
+              overflow-y: auto;
+              margin-top: 20px;
+              scrollbar-gutter: stable;
+              border-bottom: solid 3px #84bdf3;
+            "
+          >
+            <table id="data-table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th onclick="toggleSort(0)" class="sort-header">
+                    ECN No <i class="fa fa-sort"></i>
+                  </th>
+                  <th onclick="toggleSort(1)" class="sort-header">
+                    등록일 <i class="fa fa-sort"></i>
+                  </th>
+                  <th onclick="toggleSort(2)" class="sort-header">
+                    완료예정일 <i class="fa fa-sort"></i>
+                  </th>
+                  <th onclick="toggleSort(3)" class="sort-header">
+                    조치완료일 <i class="fa fa-sort"></i>
+                  </th>
+                  <th onclick="toggleSort(4)" class="sort-header">
+                    요청 파트(부서) <i class="fa fa-sort"></i>
+                  </th>
+                  <th onclick="toggleSort(5)" class="sort-header">
+                    대책파트/협력사 <i class="fa fa-sort"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사용자 정보를 가져와서 환영 메시지 표시 -->
+    <script>
+      function menudisplay(menu1, menu2, menu3, selectedlink) {
+        const arrCollectionLink =
+          document.getElementsByClassName("collection-link");
+        for (cl of arrCollectionLink) {
+          cl.classList.remove("menu_selected");
+        }
+        const collectionlink = document.getElementById(selectedlink);
+        collectionlink.classList.add("menu_selected");
+
+        const first_menu = document.getElementById("first_menu");
+        first_menu.innerHTML = `<i class="fa-solid fa-list"></i> &nbsp&nbsp${menu1}`;
+
+        const second_menu = document.getElementById("second_menu");
+        second_menu.innerText = menu2;
+        second_menu.style.visibility = "visible"; // 프로젝트명 항목 표시
+
+        const third_menu = document.getElementById("third_menu");
+        third_menu.innerText = menu3;
+        third_menu.style.visibility = "visible"; // 프로젝트 항목 표시
+      }
+
+      // 서버에서 사용자 정보를 가져와 환영 메시지에 표시
+      fetch("/user-info")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.name) {
+            document.getElementById(
+              "welcome-message"
+            ).textContent = `${data.name}님 반갑습니다.`;
+          }
+        })
+        .catch((err) =>
+          console.error("사용자 정보를 가져오는 중 오류 발생:", err)
+        );
+    </script>
+
+    <!-- 로그아웃 버튼 기능 -->
+    <script>
+      // 로그아웃 함수: 로그아웃 클릭 시 로그아웃 페이지로 이동
+      function logout() {
+        localStorage.removeItem("welcomeShown"); // 환영 메시지 상태 초기화
+        localStorage.removeItem("activeTab"); // 탭 상태 초기화
+        location.href = "/logout"; // 로그아웃 요청
+      }
+    </script>
+
+    <!-- 탭 활성화 상태를 로컬 스토리지에 저장하고 복원하는 기능 -->
+    <script>
+      // 페이지가 로드될 때 URL에 맞는 탭을 활성화
+      document.addEventListener("DOMContentLoaded", function () {
+        const activeTab = localStorage.getItem("activeTab");
+        const currentPath = window.location.pathname;
+
+        let tabToActivate;
+
+        // URL 경로에 따라 적절한 탭 설정
+        if (currentPath.includes("first")) {
+          tabToActivate = "tab1";
+        } else if (currentPath.includes("second")) {
+          tabToActivate = "tab2";
+        } else if (currentPath.includes("third")) {
+          tabToActivate = "tab3";
+        } else if (currentPath.includes("sixth")) {
+          tabToActivate = "tab4";
+        }
+
+        if (tabToActivate) {
+          // 모든 탭에서 active 클래스 제거
+          document.querySelectorAll(".nav-link").forEach(function (tab) {
+            tab.classList.remove("active");
+          });
+          // URL에 맞는 탭에 active 클래스 추가
+          document.getElementById(tabToActivate).classList.add("active");
+          localStorage.setItem("activeTab", tabToActivate); // 활성화된 탭 상태 저장
+        }
+      });
+    </script>
+
+    <!-- 긴급도 및 중요도 선택 기능 -->
+    <script>
+      let selectedCollection = null; // 선택된 컬렉션을 저장
+      let selectedDb = null; // 선택된 DB를 저장
+      let selectedUrgency = null; // 기본값 설정
+      let selectedImportance = null; // 기본값 설정
+      let originalTableData = []; // 초기 테이블 데이터를 저장할 변수
+
+      function menudisplay(menu1, menu2, menu3, selectedlink) {
+        const arrCollectionLink =
+          document.getElementsByClassName("collection-link");
+        for (cl of arrCollectionLink) {
+          cl.classList.remove("menu_selected");
+        }
+        const collectionlink = document.getElementById(selectedlink);
+        collectionlink.classList.add("menu_selected");
+
+        const first_menu = document.getElementById("first_menu");
+        first_menu.innerHTML = `<i class="fa-solid fa-list"></i>&nbsp&nbsp&nbsp${menu1}`;
+
+        const second_menu = document.getElementById("second_menu");
+        second_menu.innerText = menu2;
+        second_menu.style.visibility = "visible"; // 조회 항목 표시
+
+        const third_menu = document.getElementById("third_menu");
+        third_menu.innerText = menu3;
+        third_menu.style.visibility = "visible"; // 프로젝트 항목 표시
+      }
+
+      let sortOrder = {}; // 각 컬럼의 정렬 상태를 저장할 객체
+
+      function toggleSort(columnIndex) {
+        // 현재 정렬 상태 확인
+        const currentOrder = sortOrder[columnIndex] || "asc";
+
+        // 새 정렬 상태 결정
+        const newOrder = currentOrder === "asc" ? "desc" : "asc";
+
+        // 테이블 정렬
+        sortTable(columnIndex, newOrder);
+
+        // 해당 컬럼의 아이콘 업데이트
+        updateSortIcon(columnIndex, newOrder);
+
+        // 정렬 상태 저장
+        sortOrder[columnIndex] = newOrder;
+      }
+
+      function updateSortIcon(columnIndex, order) {
+        // 모든 컬럼의 아이콘을 초기화
+        const allIcons = document.querySelectorAll(".sort-header i");
+        allIcons.forEach((icon) => {
+          icon.classList.remove("fa-sort-up", "fa-sort-down");
+          icon.classList.add("fa-sort"); // 기본 화살표로 초기화
+        });
+
+        // 클릭한 컬럼의 아이콘 업데이트
+        const targetIcon =
+          document.querySelectorAll(".sort-header i")[columnIndex];
+        if (order === "asc") {
+          targetIcon.classList.remove("fa-sort");
+          targetIcon.classList.add("fa-sort-up"); // 오름차순
+        } else {
+          targetIcon.classList.remove("fa-sort");
+          targetIcon.classList.add("fa-sort-down"); // 내림차순
+        }
+      }
+
+      function sortTable(columnIndex, order) {
+        const table = document.getElementById("data-table");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        const sortedRows = rows.sort((a, b) => {
+          const aText = a.cells[columnIndex].textContent.trim();
+          const bText = b.cells[columnIndex].textContent.trim();
+
+          if (order === "asc") {
+            return aText.localeCompare(bText, undefined, { numeric: true });
+          } else {
+            return bText.localeCompare(aText, undefined, { numeric: true });
+          }
+        });
+
+        // 정렬된 행을 테이블에 다시 추가
+        sortedRows.forEach((row) => tbody.appendChild(row));
+      }
+
+      // 긴급도 선택 이벤트
+      document.querySelectorAll(".urgency-option").forEach((option) => {
+        option.addEventListener("click", function (event) {
+          event.preventDefault();
+          selectedUrgency = this.textContent; // 긴급도 값 설정
+          document.getElementById("urgencyDropdown").textContent =
+            selectedUrgency;
+
+          // 조건이 맞으면 데이터 갱신
+          if (
+            selectedCollection &&
+            selectedDb &&
+            (selectedUrgency || selectedImportance)
+          ) {
+            fetchData(
+              selectedCollection,
+              selectedDb,
+              selectedUrgency,
+              selectedImportance
+            );
+          }
+        });
+      });
+
+      // 중요도 선택 이벤트
+      document.querySelectorAll(".importance-option").forEach((option) => {
+        option.addEventListener("click", function (event) {
+          event.preventDefault();
+          selectedImportance = this.textContent; // 중요도 값 설정
+          document.getElementById("importanceDropdown").textContent =
+            selectedImportance;
+
+          // 조건이 맞으면 데이터 갱신
+          if (
+            selectedCollection &&
+            selectedDb &&
+            (selectedUrgency || selectedImportance)
+          ) {
+            fetchData(
+              selectedCollection,
+              selectedDb,
+              selectedUrgency,
+              selectedImportance
+            );
+          }
+        });
+      });
+
+      // 컬렉션 선택 시 데이터 필터링 및 초기화
+      document.querySelectorAll(".collection-link").forEach((link) => {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          selectedCollection = this.getAttribute("data-collection");
+          selectedDb = this.getAttribute("data-db");
+
+          // 기본값 설정: 긴급도 '상', 중요도 'High'
+          selectedUrgency = "상";
+          selectedImportance = "High";
+
+          // 드롭다운 버튼 텍스트 업데이트
+          document.getElementById("urgencyDropdown").textContent =
+            selectedUrgency;
+          document.getElementById("importanceDropdown").textContent =
+            selectedImportance;
+
+          // 테이블 초기화 및 데이터 갱신
+          clearTable();
+          if (selectedCollection && selectedDb) {
+            fetchData(
+              selectedCollection,
+              selectedDb,
+              selectedUrgency,
+              selectedImportance
+            );
+          }
+        });
+      });
+
+      // 데이터를 가져와 테이블 업데이트
+      function fetchData(collectionName, dbName, urgency, importance) {
+        document.querySelector(".reset-button").style.display = "block";
+        const tableBody = document.querySelector("#data-table tbody");
+
+        // 테이블 내용을 초기화
+        tableBody.innerHTML = "";
+
+        if (!urgency && !importance) {
+          clearTable();
+          return;
+        }
+
+        fetch(
+          `/api/cause-code-ratio?collection=${collectionName}&db=${dbName}&urgency=${
+            urgency || ""
+          }&importance=${importance || ""}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.length === 0) {
+              // 데이터가 없을 때 "데이터가 없습니다" 행 추가
+              tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; color: red;">데이터가 없습니다.</td>
+          </tr>
+        `;
+            } else {
+              // 데이터가 있을 때 테이블 행 생성
+              data.forEach((item) => {
+                const formatDate = (dateString) => {
+                  const date = new Date(dateString);
+                  const year = date.getFullYear();
+                  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+                  const day = ("0" + date.getDate()).slice(-2);
+                  return `${year}-${month}-${day}`;
+                };
+
+                const 등록일 = formatDate(item["등록일"]);
+                const 완료예정일 = formatDate(item["완료예정일"]);
+                const 조치완료일 = formatDate(item["조치완료일"]);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${item["ECN No"][""]}</td>
+            <td>${등록일 || ""}</td>
+            <td>${완료예정일 || ""}</td>
+            <td>${조치완료일 || ""}</td>
+            <td>${item["요청 파트(부서)"] || ""}</td>
+            <td>${item["대책파트/협력사"] || ""}</td>
+          `;
+                tableBody.appendChild(row);
+              });
+            }
+          })
+          .catch((error) =>
+            console.error("데이터를 가져오는 중 오류 발생:", error)
+          );
+      }
+
+      function resetTable() {
+        // 기본값 설정: 긴급도 '상', 중요도 'High'
+        selectedUrgency = "상";
+        selectedImportance = "High";
+
+        // 드롭다운 버튼 텍스트 업데이트
+        document.getElementById("urgencyDropdown").textContent =
+          selectedUrgency;
+        document.getElementById("importanceDropdown").textContent =
+          selectedImportance;
+
+        // 테이블 초기화 및 기본 필터로 데이터 갱신
+        clearTable(); // 테이블을 비우는 대신 데이터를 다시 불러옴
+        if (selectedCollection && selectedDb) {
+          fetchData(
+            selectedCollection,
+            selectedDb,
+            selectedUrgency,
+            selectedImportance
+          );
+        }
+
+        // 정렬 상태 초기화
+        sortOrder = {};
+        updateSortIcons();
+      }
+
+      function updateSortIcons() {
+        const allIcons = document.querySelectorAll(".sort-header i");
+        allIcons.forEach((icon) => {
+          icon.classList.remove("fa-sort-up", "fa-sort-down");
+          icon.classList.add("fa-sort"); // 기본 상태로 되돌리기
+        });
+      }
+
+      // 테이블 초기화 함수
+      function clearTable() {
+        const tableBody = document.querySelector("#data-table tbody");
+        tableBody.innerHTML = "";
+      }
+    </script>
+
+    <!-- 클릭된 항목에 selected 클래스를 추가해 강조 -->
+    <script>
+      let selectedLink = null;
+      document.querySelectorAll(".collection-link").forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          // 이전에 선택된 링크가 있으면 selected 클래스를 제거
+          if (selectedLink) {
+            selectedLink.classList.remove("selected");
+          }
+
+          // 새로 클릭된 링크에 selected 클래스를 추가하고 현재 선택된 링크로 설정
+          link.classList.add("selected");
+          selectedLink = link;
+        });
+      });
+
+      //화면에 값 미리 보여주기
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentPath = window.location.pathname;
+
+        if (currentPath.includes("second")) {
+          // 기본적으로 P1, 상, High가 선택되도록 설정
+          const p1Link = document.querySelector(
+            ".collection-link[data-collection='설계변경요청_P1']"
+          );
+          const urgencyButton = document.getElementById("urgencyDropdown");
+          const importanceButton =
+            document.getElementById("importanceDropdown");
+
+          // P1 선택
+          if (p1Link) {
+            selectedCollection = p1Link.getAttribute("data-collection");
+            selectedDb = p1Link.getAttribute("data-db");
+
+            p1Link.classList.add("selected"); // 선택된 항목 강조
+            selectedLink = p1Link;
+          }
+
+          // 긴급도 상 선택
+          if (urgencyButton) {
+            selectedUrgency = "상";
+            urgencyButton.textContent = selectedUrgency;
+          }
+
+          // 중요도 High 선택
+          if (importanceButton) {
+            selectedImportance = "High";
+            importanceButton.textContent = selectedImportance;
+          }
+
+          // 기본 필터 적용
+          if (selectedCollection && selectedDb) {
+            fetchData(
+              selectedCollection,
+              selectedDb,
+              selectedUrgency,
+              selectedImportance
+            );
+          }
+        }
+      });
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
